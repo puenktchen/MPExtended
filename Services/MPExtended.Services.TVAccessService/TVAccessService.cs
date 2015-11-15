@@ -437,6 +437,27 @@ namespace MPExtended.Services.TVAccessService
                 return false;
             }
         }
+        
+        public WebBoolResult UnCancelSchedule(int programId)
+        {
+            try
+            {
+                Log.Debug("Uncancelling schedule for programId {0}", programId);
+                var program = Program.Retrieve(programId);
+                foreach (Schedule schedule in Schedule.ListAll().Where(schedule => schedule.IsSerieIsCanceled(program.StartTime, program.IdChannel)))
+                {
+                    schedule.UnCancelSerie(program.StartTime, program.IdChannel);
+                    schedule.Persist();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(String.Format("Failed to uncancel schedule for programId {0}", programId), ex);
+                return false;
+            }
+        }
 
         public WebBoolResult EditSchedule(int scheduleId, int? channelId = null, string title = null, DateTime? startTime = null, DateTime? endTime = null, WebScheduleType? scheduleType = null, int? preRecordInterval = null, int? postRecordInterval = null, string directory = null, int? priority = null)
         {
