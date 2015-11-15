@@ -317,7 +317,7 @@ namespace MPExtended.Services.StreamingService
             return _stream.CustomTranscoderData(identifier, action, parameters);
         }
 
-        public Stream DoStream(WebMediaType type, int? provider, string itemId, string clientDescription, string profileName, long startPosition, int? idleTimeout)
+        public Stream DoStream(WebMediaType type, int? provider, string itemId, string identifier, string clientDescription, string profileName, long startPosition, int? idleTimeout)
         {
             if (!IsClientAuthorized())
             {
@@ -338,7 +338,6 @@ namespace MPExtended.Services.StreamingService
                 timeout = idleTimeout.Value;
 
             // This only works with profiles that actually return something in the RetrieveStream method (i.e. no RTSP or CustomTranscoderData)
-            string identifier = String.Format("dostream-{0}", new Random().Next(10000, 99999));
             StreamLog.Debug(identifier, "DoStream: using timeout={0}", timeout);
 
             if (!InitStream(type, provider, itemId, null, clientDescription, identifier, timeout))
