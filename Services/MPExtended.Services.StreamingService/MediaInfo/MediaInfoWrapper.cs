@@ -47,13 +47,9 @@ namespace MPExtended.Services.StreamingService.MediaInfo
             // Timeshiftings are a special case, as they can't be cached and need an additional path resolving step
             if (source.MediaType == WebMediaType.TV)
             {
-                if (tvCache.ContainsKey(source.Id) && DateTime.Now - tvCache[source.Id].Item1 > TimeSpan.FromSeconds(60))
-                    return tvCache[source.Id].Item2;
-
                 TsBuffer tsBuffer = new TsBuffer(source.Id);
                 Log.Debug("Using path {0} from TS buffer {1} as source for {2}", tsBuffer.GetCurrentFilePath(), source.Id, source.GetDebugName());
                 WebMediaInfo info = LoadMediaInfo(tsBuffer.GetCurrentFilePath());
-                tvCache[source.Id] = new Tuple<DateTime, WebMediaInfo>(DateTime.Now, info);
                 return info;
             }
 
@@ -108,7 +104,7 @@ namespace MPExtended.Services.StreamingService.MediaInfo
                  * TODO: Aspect ratio doesn't work properly yet
                  */
                 MediaInfo info = new MediaInfo();
-                info.Option("ParseSpeed", "0.3");
+                info.Option("ParseSpeed", "0.5");
                 info.Open(source);
                 WebMediaInfo retinfo = new WebMediaInfo();
                 retinfo.Container = info.Get(StreamKind.General, 0, "Format");
