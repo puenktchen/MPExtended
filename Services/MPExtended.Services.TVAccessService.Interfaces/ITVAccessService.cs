@@ -105,6 +105,10 @@ namespace MPExtended.Services.TVAccessService.Interfaces
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
         WebBoolResult CancelSchedule(int programId);
+        
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        WebBoolResult UnCancelSchedule(int programId);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json)]
